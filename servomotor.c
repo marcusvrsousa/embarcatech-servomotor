@@ -15,6 +15,7 @@
 #define SMOOTH_DELAY_MS 10
 
 void set_servo_pulse_width(uint gpio, uint16_t pulse_width_us) {
+    printf("Definindo largura do pulso para: %d us no GPIO %d\n", pulse_width_us, gpio);
     uint slice_num = pwm_gpio_to_slice_num(gpio);
     uint16_t level = (pulse_width_us * WRAP_VALUE) / PWM_PERIOD_US;
     pwm_set_chan_level(slice_num, pwm_gpio_to_channel(gpio), level);
@@ -42,18 +43,41 @@ void smooth_servo_movement(uint gpio, uint16_t start_pulse, uint16_t end_pulse, 
     }
 }
 
-int main() {
-    setup_servo_pwm();
+void test_pwm_config() {
+    printf("\n[TESTE] Configuração do PWM\n");
+    uint slice_num = pwm_gpio_to_slice_num(SERVO_PIN);
+    printf("Frequência esperada: 50Hz\n");
+}
 
+void test_servo_positions() {
+    printf("\n[TESTE] Movimentação do Servo\n");
+    printf("Testando 0°...\n");
     set_servo_pulse_width(SERVO_PIN, SERVO_ANGLE_0_US);
-    sleep_ms(5000);
-
+    sleep_ms(3000);
+    printf("Testando 90°...\n");
     set_servo_pulse_width(SERVO_PIN, SERVO_ANGLE_90_US);
-    sleep_ms(5000);
-
+    sleep_ms(3000);
+    printf("Testando 180°...\n");
     set_servo_pulse_width(SERVO_PIN, SERVO_ANGLE_180_US);
-    sleep_ms(5000);
+    sleep_ms(3000);
+    printf("✅ Teste concluído!\n");
+}
 
+void test_smooth_movement() {
+    printf("\n[TESTE] Movimentação Suave\n");
+    smooth_servo_movement(SERVO_PIN, SERVO_ANGLE_0_US, SERVO_ANGLE_180_US, SMOOTH_STEP_US, SMOOTH_DELAY_MS);
+    sleep_ms(1000);
+    smooth_servo_movement(SERVO_PIN, SERVO_ANGLE_180_US, SERVO_ANGLE_0_US, SMOOTH_STEP_US, SMOOTH_DELAY_MS);
+    printf("✅ Movimentação suave concluída!\n");
+}
+
+int main() {
+    stdio_init_all();
+    setup_servo_pwm();
+    test_pwm_config();
+    test_servo_positions();
+    test_smooth_movement();
+    printf("\n✅ Todos os testes básicos foram concluídos!\n");
     while (true) {
         smooth_servo_movement(SERVO_PIN, SERVO_ANGLE_180_US, SERVO_ANGLE_0_US, SMOOTH_STEP_US, SMOOTH_DELAY_MS);
         smooth_servo_movement(SERVO_PIN, SERVO_ANGLE_0_US, SERVO_ANGLE_180_US, SMOOTH_STEP_US, SMOOTH_DELAY_MS);
