@@ -27,3 +27,9 @@ Este projeto demonstra o controle de um servo motor utilizando um Raspberry Pi P
 3. Copie e cole o código main.c no ambiente de código do Wokwi.
 
 4. Utilize o seguinte diagram.json para conectar o servo:
+   
+5. Inicie a simulação e veja o servo motor se mover entre os ângulos.
+
+🎥 Vídeo Demonstrativo
+
+Para ver o funcionamento do projeto, assista ao vídeo: https://drive.google.com/file/d/18zWygKXOlqpkQecZoHT0FKVfJc1NqTTb/view?usp=sharing
